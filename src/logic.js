@@ -1,52 +1,20 @@
 import "./styles.css";
 
 class Ships {
-  constructor() {
-    (this.carrier = {
+  constructor(destroyed = 0, power = 5) {
+    this.destroyed = destroyed;
+    this.carrier = {
       size: 5,
       hits: 0,
       hit() {
         this.hits++;
       },
+      sunk: () => {
+        this.destroyed++;
+      },
       location: [],
       reserved: [],
-    }),
-      (this.battleship = {
-        size: 4,
-        hits: 0,
-        hit() {
-          this.hits++;
-        },
-        location: [],
-        reserved: [],
-      }),
-      (this.Cruiser = {
-        size: 3,
-        hits: 0,
-        hit() {
-          this.hits++;
-        },
-        location: [],
-        reserved: [],
-      }),
-      (this.submarine = {
-        size: 3,
-        hits: 0,
-        hit() {
-          this.hits++;
-        },
-        location: [],
-        reserved: [],
-      }),
-      (this.destroyer = {
-        size: 2,
-        hits: 0,
-        hit() {
-          this.hits++;
-        },
-        location: [],
-        reserved: [],
-      });
+    };
   }
 }
 
@@ -81,20 +49,20 @@ class Gameboard {
   }
 
   isHit(x, y) {
-    let tile = this.board[x][y];
-    if (tile !== "" && tile != "X") {
+    if (this.board[x][y] !== "" && this.board[x][y] != "X") {
+      this.board[x][y].hit();
       return this.board[x][y];
     } else {
-      tile = "X";
+      this.board[x][y] = "X";
       return false;
     }
   }
   reciveAttack(x, y) {
-    if (!this.isHit()) return;
+    let factor = this.isHit(x, y);
+    if (!factor) return null;
     else {
-      if (isSunk(this.isHit)) {
-        console.log("sunk");
-      }
+      if (isSunk(factor)) {
+      } else;
     }
   }
 }
@@ -102,8 +70,10 @@ class Gameboard {
 let playGame = new Gameboard();
 const fleet = new Ships();
 const isSunk = (ship) => {
-  if (ship.size === ship.hits) return true;
-  else return false;
+  if (ship.size === ship.hits) {
+    ship.sunk();
+    return true;
+  } else return false;
 };
 
 export { isSunk, fleet, playGame, Ships, Gameboard };
