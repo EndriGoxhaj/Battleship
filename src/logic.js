@@ -1,8 +1,9 @@
 import "./styles.css";
 
 class Ships {
-  constructor(destroyed = 0, power = 5) {
-    this.destroyed = destroyed;
+  constructor() {
+    this.destroyed = 0;
+    this.power = 5;
     this.carrier = {
       size: 5,
       hits: 0,
@@ -19,8 +20,8 @@ class Ships {
 }
 
 class Gameboard {
-  constructor(
-    board = [
+  constructor(navy = new Ships()) {
+    (this.board = [
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
@@ -31,9 +32,8 @@ class Gameboard {
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
-    ]
-  ) {
-    this.board = board;
+    ]),
+      (this.navy = navy);
   }
   placeShipHorizontally(ship, x, y) {
     for (let i = y; i < y + ship.size; i++) {
@@ -62,13 +62,23 @@ class Gameboard {
     if (!factor) return null;
     else {
       if (isSunk(factor)) {
-      } else;
+        this.isGameOver();
+      }
     }
+  }
+  isGameOver() {
+    if (this.navy.power === this.navy.destroyed) {
+      console.log(this.navy.power);
+      console.log(this.navy.destroyed);
+      this.gameOver();
+      return true;
+    } else return false;
+  }
+  gameOver() {
+    console.log("Game Over");
   }
 }
 
-let playGame = new Gameboard();
-const fleet = new Ships();
 const isSunk = (ship) => {
   if (ship.size === ship.hits) {
     ship.sunk();
@@ -76,4 +86,4 @@ const isSunk = (ship) => {
   } else return false;
 };
 
-export { isSunk, fleet, playGame, Ships, Gameboard };
+export { isSunk, Ships, Gameboard };
