@@ -68,8 +68,6 @@ class Gameboard {
   }
   isGameOver() {
     if (this.navy.power === this.navy.destroyed) {
-      console.log(this.navy.power);
-      console.log(this.navy.destroyed);
       this.gameOver();
       return true;
     } else return false;
@@ -86,4 +84,6 @@ const isSunk = (ship) => {
   } else return false;
 };
 
-export { isSunk, Ships, Gameboard };
+let playGame = new Gameboard();
+
+export { isSunk, Gameboard, playGame };
