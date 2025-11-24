@@ -1,5 +1,3 @@
-import "./styles.css";
-
 class Ships {
   constructor() {
     this.destroyed = 0;
@@ -17,11 +15,17 @@ class Ships {
       reserved: [],
     };
   }
+  isSunk(ship) {
+    if (ship.size === ship.hits) {
+      ship.sunk();
+      return true;
+    } else return false;
+  }
 }
 
 class Gameboard {
-  constructor(navy = new Ships()) {
-    (this.board = [
+  constructor() {
+    this.board = [
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
@@ -32,8 +36,7 @@ class Gameboard {
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", "", "", ""],
-    ]),
-      (this.navy = navy);
+    ];
   }
   placeShipHorizontally(ship, x, y) {
     for (let i = y; i < y + ship.size; i++) {
@@ -57,11 +60,18 @@ class Gameboard {
       return false;
     }
   }
+}
+
+class Player {
+  constructor(field = new Gameboard(), navy = new Ships()) {
+    this.field = field;
+    this.navy = navy;
+  }
   reciveAttack(x, y) {
-    let factor = this.isHit(x, y);
-    if (!factor) return null;
+    let result = this.field.isHit(x, y);
+    if (!result) return null;
     else {
-      if (isSunk(factor)) {
+      if (this.navy.isSunk(result)) {
         this.isGameOver();
       }
     }
@@ -77,13 +87,6 @@ class Gameboard {
   }
 }
 
-const isSunk = (ship) => {
-  if (ship.size === ship.hits) {
-    ship.sunk();
-    return true;
-  } else return false;
-};
+//let playGame = new Gameboard();
 
-let playGame = new Gameboard();
-
-export { isSunk, Gameboard, playGame };
+export { Player };

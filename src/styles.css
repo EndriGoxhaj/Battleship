@@ -1,10 +1,38 @@
+html,
 body {
+  margin: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+#content {
+  flex: 1;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px tan;
+}
+#alert {
+  width: 100vw;
+  height: 10vh;
+  border: solid 1px black;
+  display: flex;
   align-items: center;
+  justify-content: center;
 }
 
-#content {
+#Boards {
+  border: solid 1px turquoise;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+#Ships {
+  background-color: yellow;
+  height: 50px;
+  width: 100%;
+}
+.Board {
   width: 400px;
   height: 400px;
   border: solid 2px blue;
