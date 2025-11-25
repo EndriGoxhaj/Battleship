@@ -1,4 +1,5 @@
-import {} from "./logic";
+import { Player } from "./logic";
+let player = new Player();
 
 const placeShipDom = (cell) => {
   let x = parseInt(cell.dataset.row);

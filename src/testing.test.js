@@ -1,4 +1,5 @@
 import { Player } from "./logic.js";
+import { renderShips } from "./render.js";
 
 let fleet;
 let player;
@@ -6,13 +7,8 @@ let playGame;
 beforeEach(() => {
   player = new Player();
   playGame = player.field;
-  fleet = player.navy;
-  playGame.placeShipHorizontally(fleet.carrier, 1, 3);
-});
-test("sunk", () => {
-  fleet.carrier.sunk();
-  fleet.carrier.sunk();
-  expect(fleet.destroyed).toEqual(2);
+  fleet = player.navy.ships;
+  playGame.placeShipHorizontally(fleet[0], 1, 3);
 });
 
 test("isSunk", () => {
@@ -23,7 +19,7 @@ test("isSunk", () => {
       console.log("sunk");
     },
   };
-  expect(fleet.isSunk(mockShip)).toBe(true);
+  expect(playGame.isSunk(mockShip)).toBe(true);
 });
 
 test("isSunk", () => {
@@ -34,19 +30,19 @@ test("isSunk", () => {
       console.log("sunk");
     },
   };
-  expect(fleet.isSunk(mockShip)).toBe(false);
+  expect(playGame.isSunk(mockShip)).toBe(false);
 });
 
 test("hit", () => {
-  fleet.carrier.hit();
-  expect(fleet.carrier.hits).toBe(1);
+  fleet[0].hit();
+  expect(fleet[0].hits).toBe(1);
 });
 
 test("populate", () => {
-  expect(playGame.board[1][7]).toBe(fleet.carrier);
+  expect(playGame.board[1][7]).toBe(fleet[0]);
 });
 test("location", () => {
-  expect(fleet.carrier.location[4]).toEqual([1, 7]);
+  expect(fleet[0].location[4]).toEqual([1, 7]);
 });
 
 test("isHit", () => {
@@ -54,14 +50,14 @@ test("isHit", () => {
 });
 
 test("receive attack", () => {
-  expect(player.reciveAttack(1, 8)).toBe(null);
+  expect(playGame.reciveAttack(1, 8)).toBe(null);
 });
 test("receive attack 2", () => {
-  player.reciveAttack(1, 8);
+  playGame.reciveAttack(1, 8);
   expect(playGame.board[1][8]).toEqual("X");
 });
 test("receive attack 3", () => {
-  player.reciveAttack(1, 7);
+  playGame.reciveAttack(1, 7);
 });
 test("isGameOver", () => {
   let mockNavy = {
