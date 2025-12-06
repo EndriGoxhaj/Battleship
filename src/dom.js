@@ -1,4 +1,7 @@
-import { logBoard, placeShipDom } from "./render.js";
+import { shipDivs, createBoard } from "./render.js";
 
 const content = document.getElementById("content");
-const alert = document.getElementById("alert");
+createBoard("leftBoard");
+createBoard("rightBoard");
+
+content.appendChild(shipDivs());

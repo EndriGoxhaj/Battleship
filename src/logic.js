@@ -96,6 +96,6 @@ class Player {
   }
 }
 
-//let playGame = new Gameboard();
+const player1 = new Player();
 
-export { Player };
+export { Player, player1 };

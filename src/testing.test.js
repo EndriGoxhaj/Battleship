@@ -1,5 +1,4 @@
 import { Player } from "./logic.js";
-import { renderShips } from "./render.js";
 
 let fleet;
 let player;
