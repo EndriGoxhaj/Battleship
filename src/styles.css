@@ -12,16 +12,15 @@ body {
   align-items: center;
   border: solid 1px tan;
 }
-#shipContainer {
-  height: max-content;
-  width: max-content;
+#alert {
+  height: 5vh;
+  width: 60vw;
   border: solid 1px rgb(255, 0, 221);
   display: flex;
   gap: 1rem;
   align-items: flex-start;
   padding: 1rem;
 }
-
 .ship {
   display: inline-flex;
   flex-direction: row;
