@@ -3,7 +3,8 @@ class Ship {
     this.name = name;
     this.size = size;
     this.hits = 0;
-    this.location = [];
+    this.locationX;
+    this.locationY;
     this.reserved = [];
   }
   hit() {
@@ -58,9 +59,10 @@ class Gameboard {
     } else return false;
   }
   placeShipHorizontally(ship, x, y) {
+    ship.locationX = x;
+    ship.locaationY = y;
     for (let i = y; i < y + ship.size; i++) {
       this.board[x][i] = ship;
-      ship.location.push([x, i]);
     }
   }
   placeShipVertically(ship, x, y) {
@@ -84,6 +86,7 @@ class Player {
   constructor(field = new Gameboard(), navy = new Navy()) {
     this.field = field;
     this.navy = navy;
+    this.shipsPlaced = false;
   }
   isGameOver() {
     if (this.navy.power === this.navy.destroyed) {
@@ -96,6 +99,4 @@ class Player {
   }
 }
 
-const player1 = new Player();
-
-export { Player, player1 };
+export { Player };
