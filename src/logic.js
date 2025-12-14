@@ -5,6 +5,7 @@ class Ship {
     this.hits = 0;
     this.locationX;
     this.locationY;
+    this.direction;
     this.reserved = [];
   }
   hit() {
@@ -58,9 +59,10 @@ class Gameboard {
       return true;
     } else return false;
   }
-  placeShipHorizontally(ship, x, y) {
+  placeShipHorizontally(ship, x, y, direction) {
     ship.locationX = x;
-    ship.locaationY = y;
+    ship.locationY = y;
+    ship.direction = direction;
     for (let i = y; i < y + ship.size; i++) {
       this.board[x][i] = ship;
     }

@@ -53,7 +53,7 @@ const boardPopulate = (board, player) => {
       if (selectedShipDiv) {
         selectedShipDiv.classList.remove("selected");
       }
-      div.classList.add("selected");
+      highlightCells(div, "selected");
       selectedShipDiv = div;
       selectedShipObject = ships.find((ship) => ship.name === div.dataset.name);
     });
@@ -68,13 +68,13 @@ const boardPopulate = (board, player) => {
       let y = parseInt(cell.dataset.y);
 
       if (direction === "y") {
-        if (boardTrespass(y, shipLength)) return;
+        if (boardTrespass(y, selectedShipObject.size)) return;
       } else {
-        if (boardTrespass(x, shipLength)) return;
+        if (boardTrespass(x, selectedShipObject.size)) return;
       }
 
       hoveredCell = returnShip(board, x, y, direction, selectedShipObject.size);
-      highlightCells(hoveredCell);
+      highlightCells(hoveredCell, "selected");
     });
     cell.addEventListener("mouseout", () => {
       hoveredCell.forEach((cell) => {
@@ -93,16 +93,15 @@ const boardPopulate = (board, player) => {
 
       if (direction === "y") {
         if (boardTrespass(y, selectedShipObject.size, cell)) return;
-        player.field.placeShipHorizontally(selectedShipObject, x, y);
+        player.field.placeShipHorizontally(selectedShipObject, x, y, direction);
       }
       if (direction === "x") {
         if (boardTrespass(x, selectedShipObject.size, cell)) return;
         player.field.placeShipVertically(selectedShipObject, x, y);
       }
 
-      hoveredCell.forEach((cell) => {
-        cell.classList.add("shipPlaced");
-      });
+      let something = renderBoard(board, player.navy.ships);
+      highlightCells(something, "shipPlaced");
       alert.removeChild(selectedShipDiv);
       selectedShipDiv = null;
       selectedShipObject = null;

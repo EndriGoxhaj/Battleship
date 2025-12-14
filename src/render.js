@@ -13,12 +13,13 @@ function createBoard(board) {
   }
 }
 const renderBoard = (board, ships) => {
+  let shipsArray = [];
   for (let i = 0; i < ships.length; i++) {
     let x = ships[i].locationX;
     let y = ships[i].locationY;
-
-    renderShip(board, x, y, direction);
+    shipsArray.push(returnShip(board, x, y, ships[i].direction, ships[i].size));
   }
+  return shipsArray;
 };
 const returnShip = (board, x, y, direction, shiplength) => {
   let ships = [];
@@ -56,10 +57,17 @@ const boardTrespass = (direction, size) => {
     return true;
   }
 };
-const highlightCells = (cells) => {
-  cells.forEach((cell) => {
-    cell.classList.add("selected");
-  });
+const highlightCells = (cells, className) => {
+  if (Array.isArray(cells)) {
+    cells.forEach((cell) => {
+      if (Array.isArray(cell)) {
+        cell.forEach((div) => {
+          if (!div) return;
+          div.classList.add(className);
+        });
+      } else cell.classList.add(className);
+    });
+  } else cells.classList.add(className);
 };
 export {
   createBoard,
