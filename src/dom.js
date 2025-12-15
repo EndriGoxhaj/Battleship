@@ -6,30 +6,29 @@ import {
   renderBoard,
   returnShip,
   highlightCells,
+  clearBoard,
+  mouseEnter,
 } from "./render.js";
 
 let player1 = new Player();
 let player2 = new Player();
 
-const leftBoard = document.createElement("div");
-leftBoard.classList.add("Board");
-leftBoard.id = "leftBoard";
-
-const rightBoard = document.createElement("div");
-rightBoard.classList.add("Board");
-rightBoard.id = "rightBoard";
-
-const Boards = document.getElementById("Boards");
-Boards.appendChild(leftBoard);
+const board = document.getElementById("Board");
+const alert = document.createElement("alert");
+alert.id = "alert";
 
 const content = document.getElementById("content");
-content.appendChild(shipDivs(player1.navy.ships));
 
-const button = document.createElement("button");
-button.textContent = "direction = y";
+const gameStartBtn = document.createElement("button");
+content.appendChild(gameStartBtn);
+gameStartBtn.textContent = "Play";
+gameStartBtn.addEventListener("click", () => {
+  createBoard(board);
+  content.appendChild(alert);
+  boardPopulate(board, player1);
+});
 
-const alert = document.getElementById("alert");
-alert.appendChild(button);
+/*alert.appendChild(button);*/
 
 const boardPopulate = (board, player) => {
   let selectedShipDiv = null;
@@ -37,7 +36,14 @@ const boardPopulate = (board, player) => {
   let hoveredCell = [];
   let direction = "y";
   let ships = player.navy.ships;
+  let x = 0;
+  let y = 0;
 
+  shipDivs(ships, alert);
+
+  let button = document.createElement("button");
+  button.textContent = "direction = y";
+  alert.appendChild(button);
   button.addEventListener("click", () => {
     if (direction === "y") {
       direction = "x";
@@ -45,8 +51,6 @@ const boardPopulate = (board, player) => {
 
     button.textContent = `direction = ${direction}`;
   });
-
-  createBoard(board);
 
   alert.querySelectorAll(".ship").forEach((div) => {
     div.addEventListener("click", () => {
@@ -59,62 +63,40 @@ const boardPopulate = (board, player) => {
     });
   });
 
+  let mouseEnter = (e) => {
+    let cell = e.currentTarget;
+    if (cell.classList.contains("selected") || !selectedShipObject) {
+      return;
+    }
+    x = parseInt(cell.dataset.x);
+    y = parseInt(cell.dataset.y);
+    if (boardTrespass(x, y, direction, selectedShipObject.size)) return;
+    hoveredCell = returnShip(board, x, y, direction, selectedShipObject.size);
+    highlightCells(hoveredCell, "selected");
+  };
+  let mouseLeave = () => {
+    hoveredCell.forEach((cell) => {
+      cell.classList.remove("selected");
+      cell.style.cursor = "default";
+    });
+    hoveredCell.length = 0;
+  };
+  let mouseClick = () => {
+    if (!selectedShipDiv) return;
+    for (let i = 0; i < hoveredCell.length; i++) {
+      if (hoveredCell[i].classList.contains("shipPlaced")) return;
+    }
+    player.field.placeShip(selectedShipObject, x, y, direction);
+    let placedShips = renderBoard(board, player.navy.ships);
+    highlightCells(placedShips, "shipPlaced");
+    alert.removeChild(selectedShipDiv);
+    selectedShipDiv = null;
+    selectedShipObject = null;
+  };
+
   board.querySelectorAll(".cell").forEach((cell) => {
-    cell.addEventListener("mouseover", () => {
-      if (cell.classList.contains("selected") || !selectedShipObject) {
-        return;
-      }
-      let x = parseInt(cell.dataset.x);
-      let y = parseInt(cell.dataset.y);
-
-      if (direction === "y") {
-        if (boardTrespass(y, selectedShipObject.size)) return;
-      } else {
-        if (boardTrespass(x, selectedShipObject.size)) return;
-      }
-
-      hoveredCell = returnShip(board, x, y, direction, selectedShipObject.size);
-      highlightCells(hoveredCell, "selected");
-    });
-    cell.addEventListener("mouseout", () => {
-      hoveredCell.forEach((cell) => {
-        cell.classList.remove("selected");
-        cell.style.cursor = "default";
-      });
-      hoveredCell.length = 0;
-    });
-    cell.addEventListener("click", () => {
-      let x = parseInt(cell.dataset.x);
-      let y = parseInt(cell.dataset.y);
-      if (!selectedShipDiv) return;
-      for (let i = 0; i < hoveredCell.length; i++) {
-        if (hoveredCell[i].classList.contains("shipPlaced")) return;
-      }
-
-      if (direction === "y") {
-        if (boardTrespass(y, selectedShipObject.size, cell)) return;
-        player.field.placeShipHorizontally(selectedShipObject, x, y, direction);
-      }
-      if (direction === "x") {
-        if (boardTrespass(x, selectedShipObject.size, cell)) return;
-        player.field.placeShipVertically(selectedShipObject, x, y);
-      }
-
-      let something = renderBoard(board, player.navy.ships);
-      highlightCells(something, "shipPlaced");
-      alert.removeChild(selectedShipDiv);
-      selectedShipDiv = null;
-      selectedShipObject = null;
-
-      if (alert.querySelectorAll(".ship").length == 0) {
-        player.shipPlaced = true;
-        if (player === player2 && player.shipPlaced) return;
-        Boards.removeChild(leftBoard);
-        Boards.appendChild(rightBoard);
-        content.appendChild(shipDivs(player2.navy.ships));
-        boardPopulate(rightBoard, player2);
-      }
-    });
+    cell.addEventListener("mouseenter", mouseEnter);
+    cell.addEventListener("mouseleave", mouseLeave);
+    cell.addEventListener("click", mouseClick);
   });
 };
-boardPopulate(leftBoard, player1);

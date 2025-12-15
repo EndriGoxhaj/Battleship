@@ -59,18 +59,18 @@ class Gameboard {
       return true;
     } else return false;
   }
-  placeShipHorizontally(ship, x, y, direction) {
+  placeShip(ship, x, y, direction) {
     ship.locationX = x;
     ship.locationY = y;
     ship.direction = direction;
-    for (let i = y; i < y + ship.size; i++) {
-      this.board[x][i] = ship;
-    }
-  }
-  placeShipVertically(ship, x, y) {
-    for (let i = x; i < x + ship.size; i++) {
-      this.board[i][y] = ship;
-      ship.location.push([i][y]);
+    if (direction === "y") {
+      for (let i = y; i < y + ship.size; i++) {
+        this.board[x][i] = ship;
+      }
+    } else {
+      for (let i = x; i < x + ship.size; i++) {
+        this.board[i][y] = ship;
+      }
     }
   }
   isHit(x, y) {

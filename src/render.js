@@ -12,6 +12,11 @@ function createBoard(board) {
     }
   }
 }
+const clearBoard = (board) => {
+  board.querySelectorAll(".cell").forEach((cell) => {
+    cell.classList.remove("shipPlaced");
+  });
+};
 const renderBoard = (board, ships) => {
   let shipsArray = [];
   for (let i = 0; i < ships.length; i++) {
@@ -40,21 +45,22 @@ const createShip = (size, ship) => {
   }
 };
 
-const shipDivs = (ships) => {
-  let shipDock = document.createElement("div");
-  shipDock.id = "alert";
+const shipDivs = (ships, dock) => {
   ships.forEach((ship) => {
     let shipDiv = document.createElement("div");
     shipDiv.classList.add("ship");
     shipDiv.dataset.name = ship.name;
     createShip(ship.size, shipDiv);
-    shipDock.appendChild(shipDiv);
+    dock.appendChild(shipDiv);
   });
-  return shipDock;
 };
-const boardTrespass = (direction, size) => {
-  if (direction + size > 10) {
-    return true;
+const boardTrespass = (x, y, direction, size) => {
+  if (direction === "y") {
+    if (y + size > 10) {
+      return true;
+    }
+  } else {
+    if (x + size > 10) return true;
   }
 };
 const highlightCells = (cells, className) => {
@@ -69,6 +75,7 @@ const highlightCells = (cells, className) => {
     });
   } else cells.classList.add(className);
 };
+
 export {
   createBoard,
   shipDivs,
@@ -76,4 +83,5 @@ export {
   renderBoard,
   returnShip,
   highlightCells,
+  clearBoard,
 };
